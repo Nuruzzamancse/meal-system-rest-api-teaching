@@ -2,7 +2,7 @@ const Todo = require('../models/todo');
 
 
 let createTodo = (req, res, next) =>{
-    console.log(req.body.todoText);
+    console.log(req.body);
     let todoText = req.body.todoText,
         todoDesc = req.body.todoDesc;
     
@@ -20,7 +20,7 @@ let createTodo = (req, res, next) =>{
             else{
                 return res.status(200).json({
                     success: true,
-                    data: todo
+                    todo: todo
                 })
             }
     })
@@ -39,7 +39,7 @@ let getAllTodo = (req, res, next)=>{
         {
             return res.status(200).json({
                 success: true,
-                data: todo
+                todos: todo
             })
         }
     })
@@ -57,7 +57,7 @@ let getSingleTodo = (req, res, next)=>{
         else{
             return res.status(200).json({
                 success: true,
-                data: todo
+                todo: todo
             })
         }
     })
@@ -103,7 +103,7 @@ let updateTodo = (req, res, next)=>{
                 }else{
                     return res.status(200).json({
                         success: true,
-                        data: todo
+                        todo: todo
                     })
                 }
             })

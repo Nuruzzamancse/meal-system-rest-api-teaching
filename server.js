@@ -2,6 +2,7 @@ const express = require('express');
 const path    = require('path');
 const bodyParser = require('body-parser');
 const cors    = require('cors');
+const bb     = require('express-busboy');
 
 const mongoose = require('mongoose');
 const config  = require('./config/database');
@@ -14,8 +15,9 @@ mongoose.connect(config.database, (err)=>{
 })
 
 const app = express();
-// app.use(cors());
+bb.extend(app);
 app.use(bodyParser.json());
+// app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const todoRoutes = require('./routes/todo');
