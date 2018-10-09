@@ -49,7 +49,7 @@ render(){
     const editTodo = todoState.todoToEdit;
     return(
       <div className="col-md-12">
-      <h3 className="centerAlign">Todos</h3>
+      <h3 className="centerAlign">Works</h3>
       {!todos && todoState.isFetching &&
         <p>Loading todos....</p>
       }
@@ -59,14 +59,14 @@ render(){
       {todos && todos.length > 0 && !todoState.isFetching &&
       <table className="table booksTable">
       <thead>
-       <tr><th>Todo</th><th className="textCenter">Edit</th><th className="textCenter">Delete</th><th className="textCenter">View</th></tr>
+       <tr><th>Work</th><th className="textCenter">Edit</th><th className="textCenter">Delete</th><th className="textCenter">View</th></tr>
       </thead>
       <tbody>
         {todos.map((todo,i) => <tr key={i}>
-        <td>{todo.todoText}</td>
+        <td><b style={{color: 'white'}}>{todo.todoText}</b></td>
          <td className="textCenter"><Button onClick={() => this.showEditModal(todo)} bsStyle="info" bsSize="xsmall"><Glyphicon glyph="pencil" /></Button></td>
          <td className="textCenter"><Button onClick={() => this.showDeleteModal(todo)} bsStyle="danger" bsSize="xsmall"><Glyphicon glyph="trash" /></Button></td>
-         <td className="textCenter"><Link to={`/${todo._id}`}>View Details</Link> </td>
+         <td className="textCenter"><Link style={{textDecoration: 'none'}} to={`/${todo._id}`}> <b style={{color: 'white'}}>View Details</b></Link> </td>
          </tr> )
       }
       </tbody>
@@ -79,8 +79,8 @@ render(){
       container={this}
       aria-labelledby="contained-modal-title"
     >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title">Edit Your Todo</Modal.Title>
+      <Modal.Header closeButton style={{color: 'black'}}>
+        <Modal.Title id="contained-modal-title">Edit Your Work</Modal.Title>
       </Modal.Header>
       <Modal.Body>
     <div className="col-md-12">
@@ -115,13 +115,13 @@ render(){
     container={this}
     aria-labelledby="contained-modal-title"
   >
-    <Modal.Header closeButton>
-      <Modal.Title id="contained-modal-title">Delete Your Book</Modal.Title>
+    <Modal.Header closeButton style={{color: 'black'}}>
+      <Modal.Title id="contained-modal-title">Delete Your Work</Modal.Title>
     </Modal.Header>
     <Modal.Body>
     {todoState.todoToDelete && !todoState.error && !todoState.isFetching &&
       <Alert bsStyle="warning">
- Are you sure you want to delete this todo <strong>{todoState.todoToDelete.todoText} </strong> ?
+ Are you sure you want to delete<strong>{todoState.todoToDelete.todoText} </strong> ?
 </Alert>
     }
     {todoState.todoToDelete && todoState.error &&

@@ -4,3 +4,18 @@
   }
   
   .centerAlign{text-align: center;vertical-align: middle;}
+
+.bg {
+  /* The image used */
+  background-image: url('./../assests/wallpaper.jpg');
+
+  /* Full height */
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 1000px; 
+}
+body {
+  overflow-y:hidden;
+}

@@ -16,7 +16,7 @@ export const addNewTodo = (todo) => {
       }).then(response => {
         if(response.ok){
           response.json().then(data => {
-            dispatch(addNewTodoRequestSuccess(data.todo[0], data.message))
+            dispatch(addNewTodoRequestSuccess(data.todo, data.message))
           })
         }
         else{

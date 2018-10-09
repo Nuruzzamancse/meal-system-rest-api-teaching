@@ -3,8 +3,8 @@ import { FormGroup,ControlLabel,FormControl,Button } from 'react-bootstrap';
 const TodoForm = (props) => {
   return (
     <form className="form form-horizontal" id="addTodoForm" onSubmit={props.addTodo}>
-    <div className="row">
-    <h3 className="centerAlign">Add Your Todo</h3>
+    <div className="row" style={{color: 'white'}}>
+    <h3 className="centerAlign">Add Your Work</h3>
     <div className="col-md-12">
     <FormGroup>
           <ControlLabel>Todo: </ControlLabel>
