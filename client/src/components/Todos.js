@@ -2,8 +2,11 @@ import React from 'react';
 import { Alert,Glyphicon,Button,Modal } from 'react-bootstrap';
 import { Link } from 'react-router';
 import TodoEditForm from './TodoEditForm';
-import { BootstrapTable , TableHeaderColumn} from 'react-bootstrap-table';
+import { BootstrapTable , TableHeaderColumn, headerColumnClassNameFormat} from 'react-bootstrap-table';
 
+function buttonFormatter(cell, row){
+  return '<Button type="submit">Submit</Button>';
+}
 
 export default class Todos extends React.Component {
   constructor(props){
@@ -62,6 +65,7 @@ render(){
     const todos = todoState.todos;
     const editTodo = todoState.todoToEdit;
 
+  console.log(todos);
 
     const options = {
       page: 2,  // which page you want to show as default
@@ -98,25 +102,25 @@ render(){
       }
       {todos && todos.length > 0 && !todoState.isFetching &&
       <table className="table booksTable">
-      {/* <thead>
-       <tr><th>Work</th><th className="textCenter">Edit</th><th className="textCenter">Delete</th><th className="textCenter">View</th></tr>
-      </thead>
-      <tbody>
-        {todos.map((todo,i) => <tr key={i}>
-        <td><b style={{color: 'white'}}>{todo.todoText}</b></td>
-         <td className="textCenter"><Button onClick={() => this.showEditModal(todo)} bsStyle="info" bsSize="xsmall"><Glyphicon glyph="pencil" /></Button></td>
-         <td className="textCenter"><Button onClick={() => this.showDeleteModal(todo)} bsStyle="danger" bsSize="xsmall"><Glyphicon glyph="trash" /></Button></td>
-         <td className="textCenter"><Link style={{textDecoration: 'none'}} to={`/${todo._id}`}> <b style={{color: 'white'}}>View Details</b></Link> </td>
-         </tr> )
-      }
-      </tbody> */}
-
-      <BootstrapTable data={ todos } pagination={ true } options={ options } >
+      <BootstrapTable data={ todos.map( item=>{
+        return({
+          _id: item.id,
+          todoText: item.todoText,
+          todoDesc: item.todoDesc,
+          edit: <Button>Edit</Button>,
+        })
+      }) } pagination={ true } options={ options } exportCSV
+          tableHeaderClass='my-header-class'
+          tableBodyClass='my-body-class'
+          containerClass='my-container-class'
+          tableContainerClass='my-table-container-class'
+          headerContainerClass='my-header-container-class'
+          bodyContainerClass='my-body-container-class'>
       <TableHeaderColumn dataField='id' isKey hidden></TableHeaderColumn>
-      <TableHeaderColumn dataField='todoText'>Work</TableHeaderColumn>
-      <TableHeaderColumn dataField='todoText'>Edit</TableHeaderColumn>
-      <TableHeaderColumn dataField='todoText'>Delete</TableHeaderColumn>
-      <TableHeaderColumn dataField='todoText'>View</TableHeaderColumn>
+      <TableHeaderColumn className='td-header-string-example' dataField='todoText'>Work</TableHeaderColumn>
+      <TableHeaderColumn columnClassName='td-column-string-example' dataFormat={buttonFormatter}>Details</TableHeaderColumn>
+      <TableHeaderColumn dataField='edit' dataFormat={buttonFormatter} >Edit</TableHeaderColumn>
+      <TableHeaderColumn dataField='delete' dataFormat={buttonFormatter} >Delete</TableHeaderColumn>
       </BootstrapTable>
 
       </table>
