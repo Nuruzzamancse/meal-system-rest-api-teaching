@@ -27,6 +27,7 @@ export default class App extends React.Component {
     this.siginIn = this.siginIn.bind(this);
     this.signUp = this.signUp.bind(this);
     this.loginPress = this.loginPress.bind(this);
+    this.work = this.work.bind(this);
 
     this.state = {
       show: false,
@@ -37,12 +38,14 @@ export default class App extends React.Component {
 
   }
 toggleAddTodo(e){
+    this.handleShow();
     e.preventDefault();
      this.props.mappedToggleAddTodo();
   }
 
   addTodo(e){
     e.preventDefault();
+    this.setState({show: false})
     const form = document.getElementById('addTodoForm');
     if(form.todoText.value !== ""  && form.todoDesc.value !== ""){
       const data = new FormData();
@@ -63,12 +66,50 @@ siginIn(){
 }
 loginPress(){
   console.log('In login');
-  this.setState({logIn: true})
+  this.setState({logIn: true, show: false})
 }
 
 signUp(){
   console.log('Sign up clicked');
   this.setState({signIn: false, signUp: true})
+}
+
+work(){
+  return(
+      <ButtonToolbar>
+        <Modal
+          {...this.props}
+          show={this.state.show}
+          onHide={this.handleHide}
+          dialogClassName="custom-modal"
+          aria-labelledby="contained-modal-title"
+        >
+          <Modal.Header closeButton style ={{background:'rgb(66, 209, 244)'}}>
+            <Modal.Title id="contained-modal-title-lg contained-modal-title">
+              Add Your Work
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              <form id="addTodoForm" onSubmit={this.addTodo}>
+              <FieldGroup
+                name="todoText"
+                type="text"
+                label="Work Headline"
+                placeholder="Enter Your Work Headline"
+              />       
+              <FormGroup controlId="formControlsTextarea">
+                <ControlLabel>Work Description</ControlLabel>
+                <FormControl name="todoDesc" componentClass="textarea" placeholder="Enter Your Work Description" />
+              </FormGroup>
+              <Button type="submit">Submit</Button>
+            </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleHide}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      </ButtonToolbar>
+  )
 }
 
 handleShow() {
@@ -166,8 +207,8 @@ render(){
   </Navbar>
   <div className="container">
   {/* <BackgroundSlideshow style={{zIndex: '-5'}} images={[ image1, image2, image3 ]} /> */}
-  {appState.showAddTodo &&
-    <TodoForm addTodo={this.addTodo} />
+  { this.work()
+    // <TodoForm addTodo={this.addTodo} />
   }
   { /* Each Smaller Components */}
    {this.state.logIn ? <div>{this.props.children}</div>:

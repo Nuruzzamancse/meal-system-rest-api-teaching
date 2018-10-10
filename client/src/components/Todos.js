@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert,Glyphicon,Button,Modal } from 'react-bootstrap';
 import { Link } from 'react-router';
 import TodoEditForm from './TodoEditForm';
-import { BootstrapTable , TableHeaderColumn, headerColumnClassNameFormat} from 'react-bootstrap-table';
+import { BootstrapTable , TableHeaderColumn} from 'react-bootstrap-table';
 
 
 export default class Todos extends React.Component {
@@ -23,7 +23,8 @@ hideEditModal(){
      this.props.mappedhideEditModal();
   }
 submitEditTodo(e){
-    e.preventDefault();
+  e.preventDefault();
+  this.props.mappedhideEditModal();
     const editForm = document.getElementById('EditTodoForm');
     if(editForm.todoText.value !== ""){
       console.log(editForm.id.value);
@@ -51,10 +52,10 @@ buttonEdit(cell, row, enumObject, rowIndex){
   return (<Button onClick={() => this.showEditModal(row)} bsStyle="info" bsSize="xsmall"><Glyphicon glyph="pencil" /></Button>);
 }
 buttonDelete(cell, row, enumObject, rowIndex){
-  return (<Button onClick={() => this.showDeleteModal(row)} bsStyle="info" bsSize="xsmall"><Glyphicon glyph="pencil" /></Button>);
+  return (<Button onClick={() => this.showDeleteModal(row)} bsStyle="danger" bsSize="xsmall"><Glyphicon glyph="trash" /></Button>);
 }
 buttonDetails(cell, row, enumObject, rowIndex){
-  return (<Button onClick={() => this(row)} bsStyle="info" bsSize="xsmall"><Glyphicon glyph="pencil" /></Button>);
+  return (<Link style={{textDecoration: 'none'}} to={`/${row._id}`}> <b>View Details</b></Link>);
 }
 
 renderShowsTotal(start, to, total) {
@@ -63,9 +64,6 @@ renderShowsTotal(start, to, total) {
       From { start } to { to }, totals is { total }&nbsp;&nbsp;(its a customize text)
     </p>
   );
-}
-clickedMe(row){
-  // console.log(row);
 }
 
 render(){
@@ -76,8 +74,7 @@ render(){
     const editTodo = todoState.todoToEdit;
 
     const options = {
-      onRowClick: this.clickedMe.bind(this),
-      page: 2,  // which page you want to show as default
+      page: 1,  // which page you want to show as default
       sizePerPageList: [ {
         text: '5', value: 5
       }, {
@@ -86,14 +83,14 @@ render(){
         text: 'All', value: todos.length
       } ], // you can change the dropdown list for size per page
       sizePerPage: 5,  // which size per page you want to locate as default
-      pageStartIndex: 0, // where to start counting the pages
+      pageStartIndex: 1, // where to start counting the pages
       paginationSize: 3,  // the pagination bar size.
       prePage: 'Prev', // Previous page button text
       nextPage: 'Next', // Next page button text
       firstPage: 'First', // First page button text
       lastPage: 'Last', // Last page button text
       paginationShowsTotal: this.renderShowsTotal,  // Accept bool or function
-      paginationPosition: 'top'  // default is bottom, top and both is all available
+      paginationPosition: 'bottom'  // default is bottom, top and both is all available
       // hideSizePerPage: true > You can hide the dropdown for sizePerPage
       // alwaysShowAllBtns: true // Always show next and previous button
       // withFirstAndLast: false > Hide the going to First and Last page button
@@ -111,12 +108,11 @@ render(){
       }
       {todos && todos.length > 0 && !todoState.isFetching &&
       <table className="table booksTable">
-      <BootstrapTable data={ todos.map( item=>{
+     <BootstrapTable data={ todos.map( (item, index)=>{
         return({
           _id: item._id,
           todoText: item.todoText,
-          todoDesc: item.todoDesc,
-          edit: <Button>Edit</Button>,
+          todoDesc: item.todoDesc
         })
       }) } pagination={ true } options={ options } exportCSV
           tableHeaderClass='my-header-class'
@@ -125,11 +121,11 @@ render(){
           tableContainerClass='my-table-container-class'
           headerContainerClass='my-header-container-class'
           bodyContainerClass='my-body-container-class'>
-      <TableHeaderColumn dataField='id' isKey hidden></TableHeaderColumn>
+      <TableHeaderColumn dataField='_id' isKey hidden></TableHeaderColumn>
       <TableHeaderColumn className='td-header-string-example' dataField='todoText'>Work</TableHeaderColumn>
-      <TableHeaderColumn columnClassName='td-column-string-example' dataFormat={this.buttonFormatter.bind(this)}>Details</TableHeaderColumn>
-      <TableHeaderColumn dataField='edit' >Edit</TableHeaderColumn>
-      <TableHeaderColumn dataField='delete'>Delete</TableHeaderColumn>
+      <TableHeaderColumn columnClassName='td-column-string-example' dataFormat={this.buttonDetails.bind(this)}>Details</TableHeaderColumn>
+      <TableHeaderColumn dataField='edit' dataFormat={this.buttonEdit.bind(this)} >Edit</TableHeaderColumn>
+      <TableHeaderColumn dataField='delete' dataFormat={this.buttonDelete.bind(this)}>Delete</TableHeaderColumn>
       </BootstrapTable>
 
       </table>
@@ -139,13 +135,16 @@ render(){
       show={todoState.showEditModal}
       onHide={this.hideEditModal}
       container={this}
+      dialogClassName="custom-modal"
       aria-labelledby="contained-modal-title"
     >
-      <Modal.Header closeButton style={{color: 'black'}}>
-        <Modal.Title id="contained-modal-title">Edit Your Work</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-    <div className="col-md-12">
+      <Modal.Header closeButton style ={{background:'rgb(66, 209, 244)'}}>
+            <Modal.Title id="contained-modal-title-lg contained-modal-title">
+              Add Your Work
+            </Modal.Title>
+          </Modal.Header>
+    <Modal.Body>
+    <div>
     {editTodo  &&
     <TodoEditForm todoData={editTodo} editTodo={this.submitEditTodo} />
     }
@@ -177,13 +176,15 @@ render(){
     container={this}
     aria-labelledby="contained-modal-title"
   >
-    <Modal.Header closeButton style={{color: 'black'}}>
-      <Modal.Title id="contained-modal-title">Delete Your Work</Modal.Title>
+    <Modal.Header closeButton style ={{background:'rgb(183, 162, 25)'}}>
+            <Modal.Title id="contained-modal-title-lg contained-modal-title">
+              Delete Your Work
+            </Modal.Title>
     </Modal.Header>
     <Modal.Body>
     {todoState.todoToDelete && !todoState.error && !todoState.isFetching &&
       <Alert bsStyle="warning">
- Are you sure you want to delete<strong>{todoState.todoToDelete.todoText} </strong> ?
+ Are you sure you want to delete <strong>{todoState.todoToDelete.todoText} </strong> ?
 </Alert>
     }
     {todoState.todoToDelete && todoState.error &&

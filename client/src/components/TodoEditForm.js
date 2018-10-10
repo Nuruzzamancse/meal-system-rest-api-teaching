@@ -1,32 +1,32 @@
 import React from 'react';
-import { FormGroup,ControlLabel,FormControl,Button } from 'react-bootstrap';
+import { FormGroup,ControlLabel,FormControl,Button, HelpBlock } from 'react-bootstrap';
+
+function FieldGroup({ id, label, help, ...props }) {
+  return (
+    <FormGroup controlId={id}>
+      <ControlLabel>{label}</ControlLabel>
+      <FormControl {...props} />
+      {help && <HelpBlock>{help}</HelpBlock>}
+    </FormGroup>
+  );
+}
+
 const TodoEditForm = (props) => {
   return (
-    <form className="form form-horizontal" id="EditTodoForm" onSubmit={props.editTodo}>
-    <div className="row">
-    <div className="col-md-12">
-    <FormGroup>
-          <ControlLabel>Todo: </ControlLabel>
-          <input type="hidden" value={props.todoData._id} name="id"/>
-            <FormControl
-              type="text" placeholder="Enter todo"
-              name="todoText" defaultValue={props.todoData.todoText}
-               />
-        </FormGroup>
-        </div>
-        <div className="col-md-12">
-        <FormGroup>
-              <ControlLabel>Description: </ControlLabel>
-                <FormControl
-                  componentClass="textarea" placeholder="Enter description"
-                  name="todoDesc" defaultValue={props.todoData.todoDesc}
-                   />
-            </FormGroup>
-            </div>
-          </div>
-          <FormGroup>
-              <Button type="submit" bsStyle="success" bsSize="large" block>Submit</Button>
-          </FormGroup>
+    <form id="EditTodoForm" onSubmit={props.editTodo}>
+    <input type="hidden" value={props.todoData._id} name="id"/>
+    <FieldGroup
+      name="todoText"
+      defaultValue={props.todoData.todoText}
+      type="text"
+      label="Work Headline"
+      placeholder="Enter Your Work Headline"
+    />       
+    <FormGroup controlId="formControlsTextarea">
+      <ControlLabel>Work Description</ControlLabel>
+      <FormControl name="todoDesc" defaultValue={props.todoData.todoDesc} componentClass="textarea" placeholder="Enter Your Work Description" />
+    </FormGroup>
+    <Button type="submit">Submit</Button>
     </form>
   );
 }
