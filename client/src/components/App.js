@@ -170,7 +170,7 @@ render(){
     <TodoForm addTodo={this.addTodo} />
   }
   { /* Each Smaller Components */}
-   {this.state.logIn ? <div style={{color:'white'}}>{this.props.children}</div>:
+   {this.state.logIn ? <div>{this.props.children}</div>:
    <div>
     <Grid >
    <Row className="show-grid" style={{marginTop: '200px'}}>

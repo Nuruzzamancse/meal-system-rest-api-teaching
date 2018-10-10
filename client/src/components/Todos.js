@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert,Glyphicon,Button,Modal } from 'react-bootstrap';
 import { Link } from 'react-router';
 import TodoEditForm from './TodoEditForm';
+import { BootstrapTable , TableHeaderColumn} from 'react-bootstrap-table';
 export default class Todos extends React.Component {
   constructor(props){
     super(props);
@@ -58,7 +59,7 @@ render(){
       }
       {todos && todos.length > 0 && !todoState.isFetching &&
       <table className="table booksTable">
-      <thead>
+      {/* <thead>
        <tr><th>Work</th><th className="textCenter">Edit</th><th className="textCenter">Delete</th><th className="textCenter">View</th></tr>
       </thead>
       <tbody>
@@ -69,7 +70,13 @@ render(){
          <td className="textCenter"><Link style={{textDecoration: 'none'}} to={`/${todo._id}`}> <b style={{color: 'white'}}>View Details</b></Link> </td>
          </tr> )
       }
-      </tbody>
+      </tbody> */}
+
+      <BootstrapTable data={ todos }>
+      <TableHeaderColumn dataField='id' isKey>Product ID</TableHeaderColumn>
+      <TableHeaderColumn dataField='todoText'>Product Name</TableHeaderColumn>
+      </BootstrapTable>
+
       </table>
     }
 {/* Modal for editing todo */}
