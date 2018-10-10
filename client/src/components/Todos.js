@@ -4,9 +4,6 @@ import { Link } from 'react-router';
 import TodoEditForm from './TodoEditForm';
 import { BootstrapTable , TableHeaderColumn, headerColumnClassNameFormat} from 'react-bootstrap-table';
 
-function buttonFormatter(cell, row){
-  return '<Button type="submit">Submit</Button>';
-}
 
 export default class Todos extends React.Component {
   constructor(props){
@@ -50,12 +47,25 @@ cofirmDeleteTodo(){
 this.props.mappedDeleteTodo(this.props.mappedTodoState.todoToDelete);
 }
 
+buttonEdit(cell, row, enumObject, rowIndex){
+  return (<Button onClick={() => this.showEditModal(row)} bsStyle="info" bsSize="xsmall"><Glyphicon glyph="pencil" /></Button>);
+}
+buttonDelete(cell, row, enumObject, rowIndex){
+  return (<Button onClick={() => this.showDeleteModal(row)} bsStyle="info" bsSize="xsmall"><Glyphicon glyph="pencil" /></Button>);
+}
+buttonDetails(cell, row, enumObject, rowIndex){
+  return (<Button onClick={() => this(row)} bsStyle="info" bsSize="xsmall"><Glyphicon glyph="pencil" /></Button>);
+}
+
 renderShowsTotal(start, to, total) {
   return (
     <p style={ { color: 'blue' } }>
       From { start } to { to }, totals is { total }&nbsp;&nbsp;(its a customize text)
     </p>
   );
+}
+clickedMe(row){
+  // console.log(row);
 }
 
 render(){
@@ -65,9 +75,8 @@ render(){
     const todos = todoState.todos;
     const editTodo = todoState.todoToEdit;
 
-  console.log(todos);
-
     const options = {
+      onRowClick: this.clickedMe.bind(this),
       page: 2,  // which page you want to show as default
       sizePerPageList: [ {
         text: '5', value: 5
@@ -104,7 +113,7 @@ render(){
       <table className="table booksTable">
       <BootstrapTable data={ todos.map( item=>{
         return({
-          _id: item.id,
+          _id: item._id,
           todoText: item.todoText,
           todoDesc: item.todoDesc,
           edit: <Button>Edit</Button>,
@@ -118,9 +127,9 @@ render(){
           bodyContainerClass='my-body-container-class'>
       <TableHeaderColumn dataField='id' isKey hidden></TableHeaderColumn>
       <TableHeaderColumn className='td-header-string-example' dataField='todoText'>Work</TableHeaderColumn>
-      <TableHeaderColumn columnClassName='td-column-string-example' dataFormat={buttonFormatter}>Details</TableHeaderColumn>
-      <TableHeaderColumn dataField='edit' dataFormat={buttonFormatter} >Edit</TableHeaderColumn>
-      <TableHeaderColumn dataField='delete' dataFormat={buttonFormatter} >Delete</TableHeaderColumn>
+      <TableHeaderColumn columnClassName='td-column-string-example' dataFormat={this.buttonFormatter.bind(this)}>Details</TableHeaderColumn>
+      <TableHeaderColumn dataField='edit' >Edit</TableHeaderColumn>
+      <TableHeaderColumn dataField='delete'>Delete</TableHeaderColumn>
       </BootstrapTable>
 
       </table>
