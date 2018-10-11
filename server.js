@@ -17,12 +17,15 @@ mongoose.connect(config.database, (err)=>{
 const app = express();
 bb.extend(app);
 app.use(bodyParser.json());
-// app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const todoRoutes = require('./routes/todo');
+const userRoutes = require('./routes/user');
+const authRoutes = require('./routes/auth');
 
 app.use('/api/todo', todoRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/auth',authRoutes);
 
 const PORT = process.env.PORT || 8080;
 
