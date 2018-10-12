@@ -1,4 +1,4 @@
-const apiUrl = "/api/auth/";
+const apiUrl = "/api";
 export const toggleAddBook = () => {
   return {
     type: 'TOGGLE_ADD_TODO'
@@ -6,43 +6,98 @@ export const toggleAddBook = () => {
 }
 
 
-export const fetchUser = (id) => {
+export const fetchUser = (user) => {
   return (dispatch) => {
-    dispatch(fetchTodoRequest());
+    dispatch(fetchUserRequest());
       // Returns a promise
-      return fetch(`${apiUrl}${id}`)
-             .then(response => {console.log(response)
+      return fetch(`${apiUrl}/auth/login`, {
+        method:'post',
+        // headers: { 'Content-Type': 'application/json' },
+        body: user,
+      }).then(response => {console.log(response)
                if(response.ok){
                  response.json().then(data => {
                      console.log(data);
-                   dispatch(fetchTodoSuccess(data.todo, data.message));
+                   localStorage.setItem('token', data.token);
+                   localStorage.setItem('name', data.user.name);
+                   dispatch(fetchUserSuccess(data, data.success));
                  })
                }
                else{
                  response.json().then(error => {
-                   dispatch(fetchTodoFailed(error));
+                   dispatch(fetchUserFailed(error));
                  })
                }
              })
 }
 }
-export const fetchTodoRequest = () => {
+
+export const fetchUserRequest = () => {
   return {
-    type:'FETCH_TODO_REQUEST'
+    type:'FETCH_USER_REQUEST'
   }
 }
 //Sync action
-export const fetchTodoSuccess = (todo,message) => {
+export const fetchUserSuccess = (todo,message) => {
   return {
-    type: 'FETCH_TODO_SUCCESS',
-    todo: todo,
+    type: 'FETCH_USER_SUCCESS',
+    user: todo,
     message: message,
     receivedAt: Date.now
   }
 }
-export const fetchTodoFailed = (error) => {
+export const fetchUserFailed = (error) => {
   return {
-    type:'FETCH_TODO_FAILED',
+    type:'FETCH_USER_FAILED',
+    error
+  }
+}
+
+
+export const registerUser = (user) => {
+  console.log(user);
+  return (dispatch) => {
+    dispatch(registerUserRequest());
+      // Returns a promise
+      return fetch(`${apiUrl}/user`, {
+        method:'post',
+        // headers: { 'Content-Type': 'application/json' },
+        body: user,
+      }).then(response => {console.log(response)
+               if(response.ok){
+                 response.json().then(data => {
+                   console.log(data);
+                   localStorage.setItem('token', data.token);
+                   localStorage.setItem('name', data.user.name);
+                   dispatch(registerUserSuccess(data, data.success));
+                 })
+               }
+               else{
+                 response.json().then(error => {
+                  registerUserFailed(fetchUserFailed(error));
+                 })
+               }
+             })
+}
+}
+
+export const registerUserRequest = () => {
+  return {
+    type:'REGISTER_USER_REQUEST'
+  }
+}
+//Sync action
+export const registerUserSuccess = (user,message) => {
+  return {
+    type: 'REGISTER_USER_SUCCESS',
+    user: user,
+    message: message,
+    receivedAt: Date.now
+  }
+}
+export const registerUserFailed = (error) => {
+  return {
+    type:'REGISTER_USER_FAILED',
     error
   }
 }

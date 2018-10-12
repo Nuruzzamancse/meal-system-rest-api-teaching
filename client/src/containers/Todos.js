@@ -18,7 +18,10 @@ const mapDispatchToProps = (dispatch) => {
     mappedshowEditModal: todoToEdit => dispatch(todoActions.showEditModal(todoToEdit)),
     mappedhideEditModal: () => dispatch(todoActions.hideEditModal()),
     mappedshowDeleteModal: todoToDelete => dispatch(todoActions.showDeleteModal(todoToDelete)),
-    mappedhideDeleteModal: () => dispatch(todoActions.hideDeleteModal())
+    mappedhideDeleteModal: () => dispatch(todoActions.hideDeleteModal()),
+    mappedAddTodo: todo => dispatch(todoActions.addNewTodo(todo)),
+    mappedfetchTodoById: todoId => dispatch(todoActions.fetchTodoById(todoId))
+
   }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Todos);

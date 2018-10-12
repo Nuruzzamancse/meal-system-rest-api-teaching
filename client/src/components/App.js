@@ -1,8 +1,12 @@
 import React from 'react';
-import { Navbar,Nav,NavItem, ButtonToolbar, Button, Modal, Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock} from 'react-bootstrap';
+import { Navbar,Nav,NavItem,
+         ButtonToolbar, Button, Modal, Grid, 
+         Row, Col, FormGroup, ControlLabel, 
+         FormControl, HelpBlock,
+         MenuItem,NavDropdown
+        } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './App.css';
-import TodoForm from './TodoForm';
 
 function FieldGroup({ id, label, help, ...props }) {
   return (
@@ -14,11 +18,10 @@ function FieldGroup({ id, label, help, ...props }) {
   );
 }
 
+
 export default class App extends React.Component {
   constructor(props){
     super(props);
-    this.toggleAddTodo = this.toggleAddTodo.bind(this);
-    this.addTodo = this.addTodo.bind(this);
 
     this.handleShow = this.handleShow.bind(this);
     this.handleHide = this.handleHide.bind(this);
@@ -27,7 +30,8 @@ export default class App extends React.Component {
     this.siginIn = this.siginIn.bind(this);
     this.signUp = this.signUp.bind(this);
     this.loginPress = this.loginPress.bind(this);
-    this.work = this.work.bind(this);
+    this.logout  = this.logout.bind(this);
+    this.signUpPress = this.signUpPress.bind(this);
 
     this.state = {
       show: false,
@@ -37,28 +41,12 @@ export default class App extends React.Component {
     };
 
   }
-toggleAddTodo(e){
-    this.handleShow();
-    e.preventDefault();
-     this.props.mappedToggleAddTodo();
+
+logout(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    window.location.reload();
   }
-
-  addTodo(e){
-    e.preventDefault();
-    this.setState({show: false})
-    const form = document.getElementById('addTodoForm');
-    if(form.todoText.value !== ""  && form.todoDesc.value !== ""){
-      const data = new FormData();
-     data.append('todoText', form.todoText.value);
-      data.append('todoDesc', form.todoDesc.value);
-      this.props.mappedAddTodo(data);
-      this.props.mappedToggleAddTodo();
-
-    }
-    else{
-      return ;
-    }
-}
 
 siginIn(){
   console.log('Sing in click');
@@ -66,50 +54,40 @@ siginIn(){
 }
 loginPress(){
   console.log('In login');
-  this.setState({logIn: true, show: false})
+  this.setState({logIn: true, show: false});
+  const form = document.getElementById('loginUserForm');
+  if(form.email.value !== ""  && form.password.value !== ""){
+    const data = new FormData();
+    data.append('email', form.email.value);
+    data.append('password', form.password.value);
+    this.props.mappedAddUser(data);
+  }
+  else{
+    return ;
+  }
 }
 
 signUp(){
-  console.log('Sign up clicked');
-  this.setState({signIn: false, signUp: true})
+  console.log('Click');
+  this.setState({signIn: false, signUp: true});
 }
-
-work(){
-  return(
-      <ButtonToolbar>
-        <Modal
-          {...this.props}
-          show={this.state.show}
-          onHide={this.handleHide}
-          dialogClassName="custom-modal"
-          aria-labelledby="contained-modal-title"
-        >
-          <Modal.Header closeButton style ={{background:'rgb(66, 209, 244)'}}>
-            <Modal.Title id="contained-modal-title-lg contained-modal-title">
-              Add Your Work
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-              <form id="addTodoForm" onSubmit={this.addTodo}>
-              <FieldGroup
-                name="todoText"
-                type="text"
-                label="Work Headline"
-                placeholder="Enter Your Work Headline"
-              />       
-              <FormGroup controlId="formControlsTextarea">
-                <ControlLabel>Work Description</ControlLabel>
-                <FormControl name="todoDesc" componentClass="textarea" placeholder="Enter Your Work Description" />
-              </FormGroup>
-              <Button type="submit">Submit</Button>
-            </form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.handleHide}>Close</Button>
-          </Modal.Footer>
-        </Modal>
-      </ButtonToolbar>
-  )
+signUpPress(){
+  console.log('Register');
+  const form = document.getElementById('userRegistrationForm');
+  console.log(form);
+  if(form.email.value !== ""  && form.password.value !== ""){
+    const data = new FormData();
+    data.append('email', form.email.value);
+    data.append('password', form.password.value);
+    data.append('name', form.name.value);
+    data.append('username', form.username.value);
+    this.props.mappedRegisterUser(data);
+    console.log(data);
+  }
+  else{
+    return ;
+  }
+  
 }
 
 handleShow() {
@@ -140,33 +118,48 @@ login(){
           </Modal.Header>
           <Modal.Body>
             {this.state.signIn ? <div>
+              <form id="loginUserForm" onSubmit={this.loginPress}>
               <FieldGroup
                 id="formControlsEmail"
                 type="email"
+                name="email"
                 label="Email address"
                 placeholder="Enter email"
               />
-              <FieldGroup id="formControlsPassword" label="Password" type="password" />
+              <FieldGroup id="formControlsPassword" name="password" label="Password" type="password" />
               <Button bsStyle="success" bsSize="large" block onClick = {this.loginPress}>Login</Button>
               <Button bsStyle="primary" block onClick = {this.signUp}>Signup</Button>
+              </form>
             </div>:
             <div>
+            <form id="userRegistrationForm" onSubmit={this.signUpPress}>
+
                 <FieldGroup
                   id="formControlsText"
                   type="text"
                   label="Name"
+                  name = "name"
                   placeholder="Enter Your Name"
                 />
                 <FieldGroup
                   id="formControlsEmail"
                   type="email"
+                  name = "email"
                   label="Email address"
                   placeholder="Enter email"
                 />
-                <FieldGroup id="formControlsPassword" label="Password" type="password" />
+                <FieldGroup
+                  id="formControlsEmail"
+                  type="text"
+                  name = "username"
+                  label="Enter Your Username"
+                  placeholder="Enter email"
+                />
+                <FieldGroup id="formControlsPassword" name = "password" label="Password" type="password" />
                 <FieldGroup id="formControlsConfirmPassword" label="Confirm Password" type="password" />
-                <Button bsStyle="primary" bsSize="large" block onClick = {this.signUp}>Signup</Button>
+                <Button bsStyle="primary" bsSize="large" block onClick = {this.signUpPress}>Signup</Button>
                 <Button bsStyle="success"  block onClick = {this.siginIn}>Login</Button>
+            </form>
             </div>
           }
              
@@ -180,7 +173,8 @@ login(){
 }
 
 render(){
-    const appState = this.props.mappedAppState;
+    const token = localStorage.getItem('token');
+    const name  = localStorage.getItem('name');
     return(
       <div className="bg">
       <Navbar inverse  collapseOnSelect className="customNav">
@@ -197,21 +191,19 @@ render(){
         </LinkContainer>
       </Nav>
       <Nav pullRight>
-      {this.state.logIn && 
-      <LinkContainer to={{ pathname: '/', query: {  } }} onClick={this.toggleAddTodo}>
-         <NavItem eventKey={1}>Work</NavItem>
-      </LinkContainer>
-      }
+      { token && 
+             <NavDropdown eventKey="4" title={name} id="nav-dropdown">
+             <MenuItem eventKey="4.1">Profile</MenuItem>
+             <MenuItem eventKey="4.2">Settins</MenuItem>
+             <MenuItem divider />
+             <MenuItem eventKey="4.3" onClick={this.logout}>Log out</MenuItem>
+           </NavDropdown>
+        }
       </Nav>
     </Navbar.Collapse>
   </Navbar>
-  <div className="container">
-  {/* <BackgroundSlideshow style={{zIndex: '-5'}} images={[ image1, image2, image3 ]} /> */}
-  { this.work()
-    // <TodoForm addTodo={this.addTodo} />
-  }
-  { /* Each Smaller Components */}
-   {this.state.logIn ? <div>{this.props.children}</div>:
+  <div className="container" style={{marginTop: '55px'}}>
+   { token ? <div>{this.props.children}</div>:
    <div>
     <Grid >
    <Row className="show-grid" style={{marginTop: '200px'}}>

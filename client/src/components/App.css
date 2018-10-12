@@ -20,3 +20,6 @@
 body{
   overflow-y: auto;
 }
+.account-manager-table ul.react-bootstrap-table-page-btns-ul.pagination {
+  float: right;
+}

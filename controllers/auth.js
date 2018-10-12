@@ -12,7 +12,7 @@ var userLogin = (req, res, next) => {
             console.log(err);
         }
         else if (!user) {
-            return res.status(201).json({
+            return res.status(404).json({
                 success: false,
                 message: 'User dont exist'
             });
@@ -23,9 +23,9 @@ var userLogin = (req, res, next) => {
 
                 } else if(match) {
                     var token = jwt.sign(user.toJSON(), config.secret, {expiresIn: config.tokenexp});
-                    return res.status(201).json({success: true, data: user, token: token });
+                    return res.status(201).json({success: true, token , user});
                 } else {
-                    return res.status(201).json({
+                    return res.status(404).json({
                         success: false,
                         message: 'password don\'t match'
                     });
