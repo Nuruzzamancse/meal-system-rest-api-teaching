@@ -23,3 +23,8 @@ body{
 .account-manager-table ul.react-bootstrap-table-page-btns-ul.pagination {
   float: right;
 }
+.td-header-string-example{
+  color: black;
+}
+.td-column-string-example{
+}

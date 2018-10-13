@@ -286,6 +286,7 @@ render(){
         })
       }) } pagination={ true } options={ options } exportCSV
           insertRow
+          bordered={ false }
           tableHeaderClass='my-header-class'
           tableBodyClass='my-body-class'
           containerClass='my-container-class'
@@ -294,9 +295,8 @@ render(){
           bodyContainerClass='my-body-container-class'
           className='account-manager-table'>
       <TableHeaderColumn hiddenOnInsert dataField='_id' isKey hidden></TableHeaderColumn>
-      <TableHeaderColumn style={{color:'green'}} className='td-header-string-example' dataField='todoText'>Work</TableHeaderColumn>
-      <TableHeaderColumn hidden className='td-header-string-example' dataField='todoDesc'>Work Details</TableHeaderColumn>
-      <TableHeaderColumn columnClassName='td-column-string-example' dataFormat={this.buttonDetails.bind(this)}>Details</TableHeaderColumn>
+      <TableHeaderColumn columnClassName='td-column-string-example' className='td-header-string-example' dataField='todoText'>Work</TableHeaderColumn>
+      <TableHeaderColumn columnClassName='td-column-string-example' className='td-header-string-example-1' dataFormat={this.buttonDetails.bind(this)}>Details</TableHeaderColumn>
       <TableHeaderColumn hiddenOnInsert dataField='edit' dataFormat={this.buttonEdit.bind(this)} >Edit</TableHeaderColumn>
       <TableHeaderColumn hiddenOnInsert dataField='delete' dataFormat={this.buttonDelete.bind(this)}>Delete</TableHeaderColumn>
       </BootstrapTable>

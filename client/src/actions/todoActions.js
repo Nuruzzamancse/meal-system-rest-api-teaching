@@ -67,7 +67,7 @@ dispatch(fetchTodosRequest());
                     })
                   }
                 })
-}
+  }
 }
 export const fetchTodosRequest = () => {
   return {

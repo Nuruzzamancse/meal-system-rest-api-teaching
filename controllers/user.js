@@ -31,7 +31,7 @@ let createUser = (req, res, next) => {
 
 
 let getUser = (req, res, next) => {
-    User.findById(req.params.id, (err, User) => {
+    User.find({name: req.params.id}, (err, User) => {
         if(err){
             return res.status(404).json({
                 message: err,

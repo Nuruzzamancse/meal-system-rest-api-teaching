@@ -101,3 +101,50 @@ export const registerUserFailed = (error) => {
     error
   }
 }
+
+export const fetchProfile = () => {
+  return (dispatch) => {
+    dispatch(fetchProfileRequest());
+      // Returns a promise
+      return fetch(`${apiUrl}/user/${localStorage.getItem('name')}`, {
+        method:'get',
+        headers: { 'Authorization': localStorage.getItem('token') }
+      }).then(response => {
+              console.log(response)
+               if(response.ok){
+                 response.json().then(data => {
+                   console.log(data);
+                   localStorage.setItem('token', data.token);
+                   localStorage.setItem('name', data.user.name);
+                   dispatch(fetchProfileSuccess(data, data.success));
+                 })
+               }
+               else{
+                 response.json().then(error => {
+                  dispatch(fetchProfileFailed(error));
+                 })
+               }
+             })
+        }
+}
+
+export const fetchProfileRequest = () => {
+  return {
+    type:'FETCH_PROFILE_REQUEST'
+  }
+}
+//Sync action
+export const fetchProfileSuccess = (profile,message) => {
+  return {
+    type: 'FETCH_PROFILE_SUCCESS',
+    profile: profile,
+    message: message,
+    receivedAt: Date.now
+  }
+}
+export const fetchProfileFailed = (error) => {
+  return {
+    type:'FETCH_PROFILE_FAILED',
+    error
+  }
+}

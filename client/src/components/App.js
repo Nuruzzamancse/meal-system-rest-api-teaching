@@ -32,6 +32,7 @@ export default class App extends React.Component {
     this.loginPress = this.loginPress.bind(this);
     this.logout  = this.logout.bind(this);
     this.signUpPress = this.signUpPress.bind(this);
+    this.fetchProfile = this.fetchProfile.bind(this);
 
     this.state = {
       show: false,
@@ -42,6 +43,11 @@ export default class App extends React.Component {
 
   }
 
+fetchProfile(nme){
+  console.log('Fetch profile clicked');
+  this.props.mappedFetchProfile();
+}
+
 logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('name');
@@ -49,11 +55,9 @@ logout(){
   }
 
 siginIn(){
-  console.log('Sing in click');
   this.setState({signIn: true, signUp: false})
 }
 loginPress(){
-  console.log('In login');
   this.setState({logIn: true, show: false});
   const form = document.getElementById('loginUserForm');
   if(form.email.value !== ""  && form.password.value !== ""){
@@ -68,13 +72,10 @@ loginPress(){
 }
 
 signUp(){
-  console.log('Click');
   this.setState({signIn: false, signUp: true});
 }
 signUpPress(){
-  console.log('Register');
   const form = document.getElementById('userRegistrationForm');
-  console.log(form);
   if(form.email.value !== ""  && form.password.value !== ""){
     const data = new FormData();
     data.append('email', form.email.value);
@@ -193,7 +194,7 @@ render(){
       <Nav pullRight>
       { token && 
              <NavDropdown eventKey="4" title={name} id="nav-dropdown">
-             <MenuItem eventKey="4.1">Profile</MenuItem>
+             <MenuItem eventKey="4.1" onClick={this.fetchProfile}>Profile</MenuItem>
              <MenuItem eventKey="4.2">Settins</MenuItem>
              <MenuItem divider />
              <MenuItem eventKey="4.3" onClick={this.logout}>Log out</MenuItem>

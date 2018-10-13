@@ -40,11 +40,19 @@ var userAuthenticate = (req, res, next) => {
     if(token) {
         jwt.verify(token, config.secret, (err, decoded) => {
             if(err) {
-
+                res.status(400).json({
+                    message: err
+                })
             } else {
                 req.decoded = decoded;
                 next();
             }
+        });
+    }
+    else {
+        return res.status(400).json({
+            success: false,
+            message: 'You have not given token'
         });
     }
 }
